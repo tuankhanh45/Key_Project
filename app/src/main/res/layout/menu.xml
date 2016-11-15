@@ -1,0 +1,33 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorred">
+    <RelativeLayout
+            android:id="@+id/login"
+            android:layout_weight="1"
+            android:background="@color/colorgreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="25pt"
+                android:text="@string/dangnhap" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/adduser"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="25pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/dangki" />
+        </RelativeLayout>
+    </LinearLayout>
+

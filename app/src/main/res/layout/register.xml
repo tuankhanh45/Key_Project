@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorgreenmin"
+    tools:context="com.example.key.demoworks.ActivityMenu">
+    <TextView
+        android:id="@+id/namespace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/newregister"
+        android:textColor="@color/colorbluemax"
+        android:textSize="28sp" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="80dp">
+
+        <TextView
+            android:id="@+id/adduser"
+            android:textSize="12pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textColor="@color/colorred" />
+
+        <EditText
+            android:hint="@string/hint"
+            android:inputType="text"
+            android:id="@+id/edtadduser"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/adduser"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorgreen" />
+
+        <TextView
+            android:textSize="12pt"
+            android:id="@+id/adduserpass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edtadduser"
+            android:layout_marginTop="10dp"
+            android:text="@string/password"
+            android:textColor="@color/colorred" />
+
+        <EditText
+            android:hint="@string/hint"
+            android:inputType="text"
+            android:id="@+id/edtadduserpass"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/adduserpass"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorgreen" />
+        <TextView
+            android:layout_below="@+id/edtadduserpass"
+            android:id="@+id/mail"
+            android:textSize="12pt"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phonenumber"
+            android:textColor="@color/colorred" />
+
+        <EditText
+            android:hint="@string/emaildefault"
+            android:id="@+id/edtmail"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/mail"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorgreen" />
+
+        <TextView
+            android:layout_below="@+id/edtmail"
+            android:id="@+id/addusercompany"
+            android:textSize="12pt"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company"
+            android:textColor="@color/colorred" />
+
+        <EditText
+            android:hint="@string/hint"
+            android:inputType="text"
+            android:id="@+id/edtaddusercompany"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/addusercompany"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorgreen" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnadd"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="@color/colorbluemax"
+        android:text="@string/dangki" />
+
+
+</RelativeLayout>
+    </ScrollView>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">DemoWorks</string>
+    <string name="dangki">Đăng kí</string>
+    <string name="dangnhap">Đăng nhập</string>
+    <string name="phonenumber">Email: </string>
+    <string name="company">Tên công ty: </string>
+    <string name="namedefault">      </string>
+    <string name="username">Tên đăng nhập:</string>
+    <string name="pass">Mật khẩu:</string>
+    <string name="forget">Quên tài khoản?</string>
+    <string name="newregister">Đăng kí mới:</string>
+    <string name="name">Tên của bạn:</string>
+    <string name="password">Nhập mật khẩu:</string>
+    <string name="home">Home</string>
+    <string name="tendn">  Tên đăng nhập:</string>
+    <string name="id">  Id:  </string>
+    <string name="details">  Thông tin</string>
+    <string name="congty">  Công ty</string>
+    <string name="test">test</string>
+    <string name="mail">Email</string>
+    <string name="lastadd">Địa chỉ cuối:</string>
+    <string name="cong">  Số ngày làm việc trong tháng:</string>
+    <string name="emaildefault">abc@gmail.com</string>
+    <string name="hint">********</string>
+    <string name="emailfogot">Nhập  Email của bạn:</string>
+    <string name="titleemail">Nhận tin nhắn tới  Email của bạn </string>
+    <string name="send">Send</string>
+    <string name="key">Nhập key từ email của bạn:</string>
+    <string name="Ok">OK</string>
+    <string name="addpass">Nhập mật khẩu mới:</string>
+    <string name="repass">Nhập lại mật khẩu: </string>
+
+</resources>

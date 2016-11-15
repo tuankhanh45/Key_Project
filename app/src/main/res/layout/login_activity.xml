@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorgreenmin"
+    tools:context="com.example.key.demoworks.ActivityMenu">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/dangnhap"
+        android:textColor="@color/colorbluemax"
+        android:textSize="28sp" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="100dp">
+
+        <TextView
+            android:id="@+id/login"
+            android:textSize="12pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textColor="@color/colorred" />
+
+        <EditText
+            android:id="@+id/edtlogin"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/login"
+            android:layout_marginTop="20dp"
+            android:hint="@string/namedefault"
+            android:background="@color/colorgreen" />
+
+        <TextView
+            android:textSize="12pt"
+            android:id="@+id/pass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edtlogin"
+            android:layout_marginTop="20dp"
+            android:text="@string/pass"
+            android:textColor="@color/colorred" />
+
+        <EditText
+            android:inputType="text"
+            android:id="@+id/edtpass"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/pass"
+            android:layout_marginTop="15dp"
+            android:text="@string/namedefault"
+            android:background="@color/colorgreen" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnlogin"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="@color/colorbluemax"
+        android:text="@string/dangnhap" />
+
+    <TextView
+        android:id="@+id/forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnlogin"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="8dp"
+        android:text="@string/forget"
+        android:textColor="@color/colorblack" />
+</RelativeLayout>
+</ScrollView>
