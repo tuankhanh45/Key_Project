@@ -57,7 +57,7 @@ public class ActivityLogin extends AppCompatActivity {
     public String usercompany;
     public String userworkdays;
     public String userid;
-    public String s="";
+    public String s = "";
     JSONObject User;
     JSONObject Gpslocation;
     public String name1, pass1;
@@ -72,7 +72,12 @@ public class ActivityLogin extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserLogin();
+                GPSTracker gps = new GPSTracker(ActivityLogin.this);
+                // check network conection
+                if (gps.canGetNetWork()) {
+                    UserLogin();
+                }
+                else Toast.makeText(ActivityLogin.this,"Please Turn on Network",Toast.LENGTH_LONG).show();
             }
         });
         foget.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +107,7 @@ public class ActivityLogin extends AppCompatActivity {
                             Log.d("", name1);
                             Log.d("", pass1);
                             if (response.trim().equals("success")) {
-                               sendGPSLocation();
+                                sendGPSLocation();
                             } else {
                                 name.setText("");
                                 pass.setText("");
@@ -113,6 +118,7 @@ public class ActivityLogin extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(ActivityLogin.this,"Please check your conection",Toast.LENGTH_LONG).show();
                             Log.d(TAG, error.toString());
                         }
                     }) {
@@ -131,18 +137,18 @@ public class ActivityLogin extends AppCompatActivity {
 
 
     public void sendGPSLocation() {
-        Log.d("send gps location","ok");
+        Log.d("send gps location", "ok");
         //Read data from gps.txt
         try {
-            InputStream inputStream=openFileInput("gps.txt");
-            if(inputStream !=null){
-                InputStreamReader inputStreamReader=new InputStreamReader(inputStream);
-                BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
-                String s1="";
-                while ((s1=bufferedReader.readLine())!=null)
-                    s+=s1;
+            InputStream inputStream = openFileInput("gps.txt");
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String s1 = "";
+                while ((s1 = bufferedReader.readLine()) != null)
+                    s += s1;
             }
-            Log.d("readtext",s);
+            Log.d("readtext", s);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -152,11 +158,11 @@ public class ActivityLogin extends AppCompatActivity {
         try {
 
             Gpslocation = new JSONObject(s);
-            address= Gpslocation.getString("Address");
-            latitude=Gpslocation.getString("Latitude");
-            longitude=Gpslocation.getString("Longitude");
-            datetime=Gpslocation.getString("DateTime");
-            Log.d("Gpslocation:",Gpslocation.toString());
+            address = Gpslocation.getString("Address");
+            latitude = Gpslocation.getString("Latitude");
+            longitude = Gpslocation.getString("Longitude");
+            datetime = Gpslocation.getString("DateTime");
+            Log.d("Gpslocation:", Gpslocation.toString());
         } catch (JSONException e) {
             e.printStackTrace();
 
@@ -168,7 +174,7 @@ public class ActivityLogin extends AppCompatActivity {
             public void onResponse(String response) {
                 //take details and open Details User
                 parseJson();
-                Log.d("response",response);
+                Log.d("response", response);
             }
         },
                 new Response.ErrorListener() {
@@ -186,13 +192,13 @@ public class ActivityLogin extends AppCompatActivity {
                 map.put("Address", address);
                 map.put("Latitude", latitude);
                 map.put("Longitude", longitude);
-                map.put("DateTime",datetime);
+                map.put("DateTime", datetime);
 
                 Log.d("login", map.toString());
                 return map;
             }
         };
-        Log.d("sent map to server","ok");
+        Log.d("sent map to server", "ok");
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
@@ -264,7 +270,6 @@ public class ActivityLogin extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
 
 
     }

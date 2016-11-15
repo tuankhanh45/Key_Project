@@ -28,7 +28,6 @@ public class GPSTracker extends Service implements LocationListener {
 
     // flag for network status
     boolean isNetworkEnabled = false;
-
     // flag for GPS status
     boolean canGetLocation = false;
 
@@ -37,10 +36,10 @@ public class GPSTracker extends Service implements LocationListener {
     double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 100; // 100 meters
 
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 10; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 10*60*12; // 12h
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -78,7 +77,7 @@ public class GPSTracker extends Service implements LocationListener {
 
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
-                    Log.d("Network", "Network");
+                    Log.d("Network Enalble", "NetworkEnalble");
 
                     if (locationManager != null) {
 
@@ -191,7 +190,14 @@ public class GPSTracker extends Service implements LocationListener {
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
-
+    public boolean canGetNetWork(){
+        try {
+            isNetworkEnabled = locationManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this.isNetworkEnabled;}
     /**
      * Function to show settings alert dialog
      * On pressing Settings button will lauch Settings Options
