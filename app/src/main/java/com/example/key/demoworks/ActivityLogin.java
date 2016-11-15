@@ -1,8 +1,6 @@
 package com.example.key.demoworks;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,9 +26,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -40,19 +41,25 @@ public class ActivityLogin extends AppCompatActivity {
     public static final String LOGIN_URL = "http://minhkhang45.esy.es/login.php";
     public static final String LOGINJson_URL = "http://minhkhang45.esy.es/LoginJson.php";
     public static final String GPS_URL = "http://minhkhang45.esy.es/Gps.php";
-   // public Button home;
+    // public Button home;
     public EditText name, pass;
     public TextView foget;
     public Button login;
     protected GPSTracker gps;
     private String TAG = "";
-    String address = "";
+
+    public String address = "";
+    public String latitude;
+    public String longitude;
+    public String datetime;
     public String username;
     public String useremail;
     public String usercompany;
     public String userworkdays;
     public String userid;
+    public String s="";
     JSONObject User;
+    JSONObject Gpslocation;
     public String name1, pass1;
     public GoogleApiClient client;
 
@@ -60,19 +67,12 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-       // home = (Button) findViewById(R.id.home);
         foget = (TextView) findViewById(R.id.forget);
         login = (Button) findViewById(R.id.btnlogin);
-       /* home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ActivityLogin.this, ActivityMenu.class);
-                startActivity(i);
-            }
-        });*/
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sendGPSLocation();
                 UserLogin();
             }
         });
@@ -103,9 +103,8 @@ public class ActivityLogin extends AppCompatActivity {
                             Log.d("", name1);
                             Log.d("", pass1);
                             if (response.trim().equals("success")) {
-                                sendGPSLocation();
+                               // sendGPSLocation();
                             } else {
-                                //Toast.makeText(ActivityLogin.this, "response"+response, Toast.LENGTH_LONG).show();
                                 name.setText("");
                                 pass.setText("");
                                 Toast.makeText(ActivityLogin.this, "Sai tai khoan hoac mat khau", Toast.LENGTH_LONG).show();
@@ -133,54 +132,67 @@ public class ActivityLogin extends AppCompatActivity {
 
 
     public void sendGPSLocation() {
-        gps = new GPSTracker(ActivityLogin.this);
-        // check if GPS enabled and take address
-        if (gps.canGetLocation()) {
-            Log.d("", "can get gps");
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                List<Address> addresses = geocoder.getFromLocation(gps.getLatitude(), gps.getLongitude(), 1);
-                if (addresses.size() > 0) {
-                    for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex(); i++)
-                        address += addresses.get(0).getAddressLine(i) + " ";
-                }
-
-                Log.d("address:", address);
-            } catch (Exception e) {
-                e.printStackTrace();
+        Log.d("send gps location","ok");
+        //Read data from gps.txt
+        try {
+            InputStream inputStream=openFileInput("gps.txt");
+            if(inputStream !=null){
+                InputStreamReader inputStreamReader=new InputStreamReader(inputStream);
+                BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
+                String s1="";
+                while ((s1=bufferedReader.readLine())!=null)
+                    s+=s1;
             }
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, GPS_URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    parseJson();
-                }
-            },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d(TAG, error.toString());
-
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("UserName", name1);
-                    map.put("Address", address);
-                    map.put("Latitude", Double.toString(gps.getLatitude()));
-                    map.put("Longitude", Double.toString(gps.getLongitude()));
-
-                    Log.d("login", "send location and address");
-                    Log.d("login", map.toString());
-                    return map;
-                }
-            };
-            Log.d("login", address + Double.toString(gps.getLatitude()) + Double.toString(gps.getLongitude()));
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
-        } else {
-            gps.showSettingsAlert();
+            Log.d("readtext",s);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        //Parse JsonObject
+        try {
+
+            Gpslocation = new JSONObject(s);
+            address= Gpslocation.getString("Address");
+            latitude=Gpslocation.getString("Latitude");
+            longitude=Gpslocation.getString("Longitude");
+            datetime=Gpslocation.getString("DateTime");
+            Log.d("Gpslocation:",Gpslocation.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+        //Make String request and push map to server
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, GPS_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //parseJson();
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, error.toString());
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("UserName", name1);
+                map.put("Address", address);
+                map.put("Latitude", latitude);
+                map.put("Longitude", longitude);
+                map.put("DateTime",datetime);
+                Log.d("login", "send location and address");
+                Log.d("login", map.toString());
+                return map;
+            }
+        };
+        Log.d("login", address + Double.toString(gps.getLatitude()) + Double.toString(gps.getLongitude()));
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
     }
 
     public void parseJson() {
@@ -192,41 +204,42 @@ public class ActivityLogin extends AppCompatActivity {
                         Log.d("response:", response);
                         if (response.trim().equals("[]")) {
                             Toast.makeText(ActivityLogin.this, "Connect Erorr", Toast.LENGTH_SHORT).show();
-                        }
-                        else {try {
+                        } else {
+                            //parse respon to Jsonobject user
+                            try {
 
-                            User = new JSONObject(response);
-                            username = User.getString("UserName");
-                            useremail = User.getString("Email");
-                            usercompany = User.getString("Company");
-                            userid = User.getString("Id");
-                            userworkdays = User.getString("WorkDays");
+                                User = new JSONObject(response);
+                                username = User.getString("UserName");
+                                useremail = User.getString("Email");
+                                usercompany = User.getString("Company");
+                                userid = User.getString("Id");
+                                userworkdays = User.getString("WorkDays");
 
-                            Log.d("parse Json", User.toString());
-                            Log.d("phone", useremail);
-                            Log.d("company", usercompany);
-                            Log.d("name", username);
-                            Log.d("parsjson", User.toString());
-                            Intent i = new Intent(ActivityLogin.this, Details.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("name", username);
-                            bundle.putString("mail", useremail);
-                            bundle.putString("company", usercompany);
-                            bundle.putString("id", userid);
-                            bundle.putString("workdays", userworkdays);
-                            bundle.putString("lastaddress", address);
-
-
-                            Log.d("bundle:", bundle.toString());
-
-                            i.putExtra("User", bundle);
-                            startActivity(i);
+                                Log.d("parse Json", User.toString());
+                                Log.d("phone", useremail);
+                                Log.d("company", usercompany);
+                                Log.d("name", username);
+                                Log.d("parsjson", User.toString());
+                                Intent i = new Intent(ActivityLogin.this, Details.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("name", username);
+                                bundle.putString("mail", useremail);
+                                bundle.putString("company", usercompany);
+                                bundle.putString("id", userid);
+                                bundle.putString("workdays", userworkdays);
+                                bundle.putString("lastaddress", address);
 
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                                Log.d("bundle:", bundle.toString());
 
-                        }
+                                i.putExtra("User", bundle);
+                                startActivity(i);
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+
+                            }
 
                         }
 
@@ -249,64 +262,13 @@ public class ActivityLogin extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-       /* JsonArrayRequest getRequest = new JsonArrayRequest(LOGINJson_URL, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d("get ", "json");
-                Log.d("Responsearrayjson", response.toString());
 
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        User = (JSONObject) response.get(i);
-                    }
-                    username = User.getString("UserName");
-                    userphone = User.getString("Phone");
-                    usercompany = User.getString("Company");
-                    userid = User.getString("Id");
-                    userworkdays = User.getString("WorkDays");
-
-                    Log.d("parse Json", User.toString());
-                    Log.d("phone", userphone);
-                    Log.d("company", usercompany);
-                    Log.d("name", username);
-                    Log.d("parsjson", User.toString());
-                    Intent i = new Intent(ActivityLogin.this, Details.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("name", username);
-                    bundle.putString("phone", userphone);
-                    bundle.putString("company", usercompany);
-                    bundle.putString("id", userid);
-                    bundle.putString("workdays", userworkdays);
-                    bundle.putString("lastaddress", address);
-
-
-                    Log.d("bundle:", bundle.toString());
-
-                    i.putExtra("User", bundle);
-                    startActivity(i);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                }
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
-        );
-        RequestQueue requestQueue1 = Volley.newRequestQueue(this);
-        requestQueue1.add(getRequest);*/
 
     }
 
     public void doFoget() {
         //Intent i =new Intent(ActivityLogin.this,FogetActivity.class);
-        startActivity(new Intent(ActivityLogin.this,FogetActivity.class));
+        startActivity(new Intent(ActivityLogin.this, FogetActivity.class));
 
     }
 
