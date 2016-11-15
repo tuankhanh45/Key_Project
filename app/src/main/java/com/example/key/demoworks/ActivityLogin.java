@@ -72,7 +72,6 @@ public class ActivityLogin extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendGPSLocation();
                 UserLogin();
             }
         });
@@ -103,7 +102,7 @@ public class ActivityLogin extends AppCompatActivity {
                             Log.d("", name1);
                             Log.d("", pass1);
                             if (response.trim().equals("success")) {
-                               // sendGPSLocation();
+                               sendGPSLocation();
                             } else {
                                 name.setText("");
                                 pass.setText("");
@@ -163,10 +162,13 @@ public class ActivityLogin extends AppCompatActivity {
 
         }
         //Make String request and push map to server
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GPS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //parseJson();
+                //take details and open Details User
+                parseJson();
+                Log.d("response",response);
             }
         },
                 new Response.ErrorListener() {
@@ -179,17 +181,18 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
+                //push data to map
                 map.put("UserName", name1);
                 map.put("Address", address);
                 map.put("Latitude", latitude);
                 map.put("Longitude", longitude);
                 map.put("DateTime",datetime);
-                Log.d("login", "send location and address");
+
                 Log.d("login", map.toString());
                 return map;
             }
         };
-        Log.d("login", address + Double.toString(gps.getLatitude()) + Double.toString(gps.getLongitude()));
+        Log.d("sent map to server","ok");
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
@@ -267,7 +270,6 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     public void doFoget() {
-        //Intent i =new Intent(ActivityLogin.this,FogetActivity.class);
         startActivity(new Intent(ActivityLogin.this, FogetActivity.class));
 
     }
