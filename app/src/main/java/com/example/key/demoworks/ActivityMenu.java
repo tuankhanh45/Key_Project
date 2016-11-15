@@ -12,6 +12,10 @@ import android.widget.RelativeLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,6 +25,7 @@ import java.util.Locale;
 public class ActivityMenu extends AppCompatActivity {
     public RelativeLayout login;
     public RelativeLayout register;
+    public String JsonArrayLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,7 @@ public class ActivityMenu extends AppCompatActivity {
         // check if GPS enabled and take address
         if (gps.canGetLocation()) {
             String Details="";
-            String JsonArrayLocation="";
+            JsonArrayLocation="";
             String address="";
             Log.d("", "can get gps");
             DateFormat df = new SimpleDateFormat("yyyy:MM:dd  HH:mm:ss ");
@@ -66,6 +71,11 @@ public class ActivityMenu extends AppCompatActivity {
             }
             JsonArrayLocation=obj.toString();
             Log.d("string:",JsonArrayLocation);
+            //Write to gps.txt file
+            //with losing older data:
+             overwriteData();
+            //without losing data??????
+            ApendWriteData();
 
         }
         login.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +94,26 @@ public class ActivityMenu extends AppCompatActivity {
         });
 
     }
+    public void overwriteData()
+    {
+        try {
+
+            FileOutputStream fileout = openFileOutput("gps.txt", MODE_PRIVATE);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+            outputWriter.write(JsonArrayLocation);
+            Log.d("write to","gps.txt file");
+            outputWriter.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void ApendWriteData(){
+        //coding here
+    }
+
 
 
 }
