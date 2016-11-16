@@ -98,9 +98,10 @@ public class ActivityMenu extends AppCompatActivity {
     {
         try {
 
-            FileOutputStream fileout = openFileOutput("gps.txt", MODE_PRIVATE);
+            FileOutputStream fileout = openFileOutput("gps.txt", MODE_APPEND);
             OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
             outputWriter.write(JsonArrayLocation);
+            outputWriter.write(",");
             Log.d("write to","gps.txt file");
             outputWriter.close();
 

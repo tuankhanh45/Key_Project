@@ -52,6 +52,8 @@ public class ActivityLogin extends AppCompatActivity {
     public String latitude;
     public String longitude;
     public String datetime;
+    public String JsonArrayPost;
+
     public String username;
     public String useremail;
     public String usercompany;
@@ -148,13 +150,18 @@ public class ActivityLogin extends AppCompatActivity {
                 while ((s1 = bufferedReader.readLine()) != null)
                     s += s1;
             }
+            JsonArrayPost="["+ s ;
+            JsonArrayPost=JsonArrayPost.substring(0,JsonArrayPost.length()-1)+"]";
             Log.d("readtext", s);
+            Log.d("post",JsonArrayPost);
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //Parse JsonObject
+       /* //Parse JsonObject to data and post
         try {
 
             Gpslocation = new JSONObject(s);
@@ -166,13 +173,14 @@ public class ActivityLogin extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
 
-        }
+        }*/
         //Make String request and push map to server
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GPS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //take details and open Details User
+                deleteOlderData();
                 parseJson();
                 Log.d("response", response);
             }
@@ -190,10 +198,13 @@ public class ActivityLogin extends AppCompatActivity {
                 //push data to map
                 map.put("UserName", name1);
                 map.put("Address", address);
-                map.put("Latitude", latitude);
-                map.put("Longitude", longitude);
-                map.put("DateTime", datetime);
 
+               /* map.put("Latitude", latitude);
+                map.put("Longitude", longitude);
+                map.put("DateTime", datetime);*/
+
+                //Post data to server with JsonArray
+                map.put("JsonArray",JsonArrayPost);
                 Log.d("login", map.toString());
                 return map;
             }
@@ -273,10 +284,11 @@ public class ActivityLogin extends AppCompatActivity {
 
 
     }
+    public void deleteOlderData(){
 
+    }
     public void doFoget() {
         startActivity(new Intent(ActivityLogin.this, FogetActivity.class));
-
     }
 
     /**
