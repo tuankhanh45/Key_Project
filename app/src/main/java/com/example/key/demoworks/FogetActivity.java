@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -20,7 +21,6 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by key on 11/1/2016.
@@ -37,6 +37,7 @@ public class FogetActivity extends AppCompatActivity {
     protected EditText edtpass;
     protected EditText edtrepass;
     private Button sendpass;
+    private TextView name;
 
     public String mk;
     private final String postmail_URL = "http://minhkhang45.esy.es/postmail.php";
@@ -56,7 +57,9 @@ public class FogetActivity extends AppCompatActivity {
         edtkey = (EditText) findViewById(R.id.edtkey);
         sendkey = (Button) findViewById(R.id.sendkey);
 
+
         repass = (RelativeLayout) findViewById(R.id.repass);
+        name = (TextView) findViewById(R.id.name);
         edtpass = (EditText) findViewById(R.id.edtpass);
         edtrepass = (EditText) findViewById(R.id.edtrepass);
         sendpass = (Button) findViewById(R.id.sendpass);
@@ -73,19 +76,24 @@ public class FogetActivity extends AppCompatActivity {
 
     }
 
+    //Send mail to server
     protected void Sendmail() {
         if (mail.getText().toString().equals("")) {
             Log.d("erorr", ":");
         } else {
-            Random rd = new Random();
-            mk = String.valueOf(rd.nextInt(9999 - 1000) + 1000);
+            mk = "";
+            //Random rd = new Random();
+            // mk = String.valueOf(rd.nextInt(9999 - 1000) + 1000);
+            //Make string request to send key to user's email
             StringRequest stringRequest = new StringRequest(Request.Method.POST, postmail_URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("response:", response);
-                            Log.d(mk, mail.getText().toString());
-                            if (response.trim().equals("success")) {
+                            //take key from server
+                            mk = response.trim();
+                            Log.d("mail:", mail.getText().toString());
+                            if (response.trim() != null) {
                                 //Test key send and fill in
                                 doKey();
                                 // startActivity(new Intent(FogetActivity.this,RepassActivity.class));
@@ -106,7 +114,7 @@ public class FogetActivity extends AppCompatActivity {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> map = new HashMap<String, String>();
-                    map.put("mk", mk);
+                    // map.put("mk", mk);
                     map.put("email", mail.getText().toString().toLowerCase());
                     return map;
                 }
@@ -116,10 +124,11 @@ public class FogetActivity extends AppCompatActivity {
         }
     }
 
+    //Compare key and editext of user
     protected void doKey() {
         addmail.setVisibility(View.GONE);
         addkey.setVisibility(View.VISIBLE);
-        Log.d("re", "Key");
+
         sendkey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +137,7 @@ public class FogetActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(FogetActivity.this, "Sorry! Wrong key, please checked  ", Toast.LENGTH_LONG).show();
                     Log.d("sai key", " email");
-                    Log.d(mk, edtkey.getText().toString());
+                    Log.d("mk:" + mk, edtkey.getText().toString());
                 }
 
             }
@@ -137,10 +146,13 @@ public class FogetActivity extends AppCompatActivity {
 
     }
 
+    // Change pass word.
     protected void doRepass() {
         Log.d("do", "Repass");
+        name.setText(mail.getText().toString());
         addkey.setVisibility(View.GONE);
         repass.setVisibility(View.VISIBLE);
+
         sendpass.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -153,14 +165,19 @@ public class FogetActivity extends AppCompatActivity {
                                                                 @Override
                                                                 public void onResponse(String response) {
                                                                     Log.d("response:", response);
-                                                                    Log.d("pass",edtpass.getText().toString());
-                                                                    Log.d("mail send",mail.getText().toString().toLowerCase());
-                       /* if (response.trim().equals("success")) {
-                            Toast.makeText(FogetActivity.this,"Success! You can login!",Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(FogetActivity.this, "Sorry!Fail to repass", Toast.LENGTH_LONG).show();
+                                                                    Log.d("pass", edtpass.getText().toString());
+                                                                    Log.d("mail send", mail.getText().toString().toLowerCase());
+                                                                    if (response.trim() != null) {
+                                                                        Toast.makeText(FogetActivity.this, "Success! You can login!", Toast.LENGTH_LONG).show();
+                                                                        Toast.makeText(FogetActivity.this, response + "  Pass:" + edtpass.getText().toString(), Toast.LENGTH_LONG).show();
+                                                                        Toast.makeText(FogetActivity.this, response + "  Pass:" + edtpass.getText().toString(), Toast.LENGTH_LONG).show();
+                                                                        Toast.makeText(FogetActivity.this, response + "  Pass:" + edtpass.getText().toString(), Toast.LENGTH_LONG).show();
+                                                                        edtpass.setText("");
+                                                                        edtrepass.setText("");
+                                                                    } else {
+                                                                        Toast.makeText(FogetActivity.this, "Sorry!Fail to repass", Toast.LENGTH_LONG).show();
 
-                        }*/
+                                                                    }
                                                                 }
                                                             },
                                                             new Response.ErrorListener() {
