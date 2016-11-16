@@ -28,9 +28,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -179,8 +181,9 @@ public class ActivityLogin extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GPS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //take details and open Details User
+                //Delete all older data from gps.txt after sent data to sever success
                 deleteOlderData();
+                //take details and open Details User
                 parseJson();
                 Log.d("response", response);
             }
@@ -217,6 +220,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     public void parseJson() {
         Log.d("open", "details");
+        //Make request to take details user
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGINJson_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -285,6 +289,19 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
     public void deleteOlderData(){
+        try {
+
+            FileOutputStream fileout = openFileOutput("gps.txt", MODE_PRIVATE);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+            outputWriter.write("");
+            Log.d("delete all data in ","gps.txt file");
+            outputWriter.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
     public void doFoget() {
