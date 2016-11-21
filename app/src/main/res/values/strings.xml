@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DemoWorks</string>
+    <string name="app_name">CountingWokers</string>
     <string name="dangki">Đăng kí</string>
     <string name="dangnhap">Đăng nhập</string>
     <string name="phonenumber">Email: </string>

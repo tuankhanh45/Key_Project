@@ -70,14 +70,14 @@ public class FogetActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Sendmail();
+                sendEmail();
             }
         });
 
     }
 
     //Send mail to server
-    protected void Sendmail() {
+    protected void sendEmail() {
         if (mail.getText().toString().equals("")) {
             Log.d("erorr", ":");
         } else {

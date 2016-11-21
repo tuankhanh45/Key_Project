@@ -74,14 +74,14 @@ public class ActivityRegister extends AppCompatActivity {
         email = mail.getText().toString().trim();
         company = addcompany.getText().toString();
         //test add
-        if (!checkdetail()) {
+        if (!checkDetail()) {
          Log.d("thieu"," hoac sai thong tin");
         } else {
-            checkdb();
+            checkDb();
         }
     }
 
-    public void checkdb() {
+    public void checkDb() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL,
                 new Response.Listener<String>() {
                     //dua ra thong tin thành cong hay ko.
@@ -122,7 +122,7 @@ public class ActivityRegister extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public boolean checkdetail() {
+    public boolean checkDetail() {
         boolean check = true;
         if (name.equals("") || pass.equals("") || email.equals("") || company.equals("")){
             Toast.makeText(ActivityRegister.this, "Erorr! Fill full infomation ", Toast.LENGTH_SHORT).show();

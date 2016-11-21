@@ -79,7 +79,7 @@ public class ActivityLogin extends AppCompatActivity {
                 GPSTracker gps = new GPSTracker(ActivityLogin.this);
                 // check network conection
                 if (gps.canGetNetWork()) {
-                    UserLogin();
+                    doUserLogin();
                 }
                 else Toast.makeText(ActivityLogin.this,"Please Turn on Network",Toast.LENGTH_LONG).show();
             }
@@ -93,7 +93,7 @@ public class ActivityLogin extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void UserLogin() {
+    public void doUserLogin() {
         // login checking
         name = (EditText) findViewById(R.id.edtlogin);
         pass = (EditText) findViewById(R.id.edtpass);
